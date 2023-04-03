@@ -267,6 +267,14 @@ By default, Playwright looks for files matching the following glob pattern: `**/
 
 Use [`property: TestConfig.testMatch`] to change this option for all projects.
 
+## property: TestProject.testTitlePredicate
+* since: v1.33
+- `title` ?<[function]\([string]\): [boolean]>
+
+Only the tests with titles matching the predicate are executed. Matching is performed against the test title only.
+
+Use [`property: TestConfig.testTitlePredicate`] to change this option for all projects.
+
 ## property: TestProject.timeout
 * since: v1.10
 - type: ?<[int]>

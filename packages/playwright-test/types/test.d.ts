@@ -1223,7 +1223,7 @@ interface TestConfig {
    * ```
    *
    */
-  testTitlePredicate: ((string: string) => boolean);
+  testTitlePredicate?: ((string: string) => boolean);
 
   /**
    * Timeout for each test in milliseconds. Defaults to 30 seconds.
@@ -5899,6 +5899,15 @@ interface TestProject {
    * option for all projects.
    */
   testMatch?: string|RegExp|Array<string|RegExp>;
+
+  /**
+   * Only the tests with titles matching the predicate are executed. Matching is performed against the test title only.
+   *
+   * Use
+   * [testConfig.testTitlePredicate](https://playwright.dev/docs/api/class-testconfig#test-config-test-title-predicate)
+   * to change this option for all projects.
+   */
+  testTitlePredicate?: ((string: string) => boolean);
 
   /**
    * Timeout for each test in milliseconds. Defaults to 30 seconds.

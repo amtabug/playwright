@@ -73,6 +73,7 @@ type ProjectInternal = {
   expect: Project['expect'];
   respectGitIgnore: boolean;
   deps: FullProjectInternal[];
+  testTitlePredicate?: Matcher;
 };
 
 /**

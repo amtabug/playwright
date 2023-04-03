@@ -193,7 +193,9 @@ async function createProjectSuite(fileSuites: Suite[], project: FullProjectInter
 
   filterByFocusedLine(projectSuite, options.cliFileFilters);
   filterByTestIds(projectSuite, options.testIdMatcher);
+
   filterByTitlePredicate(projectSuite, options.predicateTitleMatcher);
+  filterByTitlePredicate(projectSuite, project._internal.testTitlePredicate);
 
   const grepMatcher = createTitleMatcher(project.grep);
   const grepInvertMatcher = project.grepInvert ? createTitleMatcher(project.grepInvert) : null;

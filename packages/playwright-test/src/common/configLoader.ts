@@ -128,11 +128,10 @@ export class ConfigLoader {
     this._fullConfig.reportSlowTests = takeFirst(config.reportSlowTests, baseFullConfig.reportSlowTests);
     this._fullConfig.quiet = takeFirst(config.quiet, baseFullConfig.quiet);
     this._fullConfig.shard = takeFirst(config.shard, baseFullConfig.shard);
+    this._fullConfig._internal.testTitlePredicate = takeFirst(config.testTitlePredicate);
     this._fullConfig._internal.ignoreSnapshots = takeFirst(config.ignoreSnapshots, baseFullConfig._internal.ignoreSnapshots);
     this._fullConfig.updateSnapshots = takeFirst(config.updateSnapshots, baseFullConfig.updateSnapshots);
     this._fullConfig._internal.plugins = ((config as any)._plugins || []).map((p: any) => ({ factory: p }));
-    this._fullConfig._internal.testTitlePredicate = takeFirst(config.testTitlePredicate);
-    // config.testTitlePredicate = takeFirst(config.testTitlePredicate);
     this._fullConfig._internal.defineConfigWasUsed = !!(config as any)[kDefineConfigWasUsed];
 
     const workers = takeFirst(config.workers, '50%');
@@ -224,6 +223,7 @@ export class ConfigLoader {
         expect: takeFirst(projectConfig.expect, config.expect, {}),
         deps: [],
         respectGitIgnore: respectGitIgnore,
+        testTitlePredicate: takeFirst(projectConfig.testTitlePredicate),
       },
       grep: takeFirst(projectConfig.grep, config.grep, baseFullConfig.grep),
       grepInvert: takeFirst(projectConfig.grepInvert, config.grepInvert, baseFullConfig.grepInvert),
