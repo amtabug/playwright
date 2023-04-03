@@ -120,6 +120,14 @@ export function filterByTestIds(suite: Suite, testIdMatcher: Matcher | undefined
   filterTestsRemoveEmptySuites(suite, test => testIdMatcher(test.id));
 }
 
+export function filterByTitlePredicate(suite: Suite, testTitleMatcher: Matcher | undefined) {
+  // eslint-disable-next-line no-console
+  console.log('CALLING PREDICATE');
+  if (!testTitleMatcher)
+    return;
+  filterTestsRemoveEmptySuites(suite, test => testTitleMatcher(test.title));
+}
+
 function createFileMatcherFromFilter(filter: TestFileFilter) {
   const fileMatcher = createFileMatcher(filter.re || filter.exact || '');
   return (testFileName: string, testLine: number, testColumn: number) =>

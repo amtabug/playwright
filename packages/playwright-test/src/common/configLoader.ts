@@ -131,6 +131,8 @@ export class ConfigLoader {
     this._fullConfig._internal.ignoreSnapshots = takeFirst(config.ignoreSnapshots, baseFullConfig._internal.ignoreSnapshots);
     this._fullConfig.updateSnapshots = takeFirst(config.updateSnapshots, baseFullConfig.updateSnapshots);
     this._fullConfig._internal.plugins = ((config as any)._plugins || []).map((p: any) => ({ factory: p }));
+    this._fullConfig._internal.testTitlePredicate = takeFirst(config.testTitlePredicate);
+    // config.testTitlePredicate = takeFirst(config.testTitlePredicate);
     this._fullConfig._internal.defineConfigWasUsed = !!(config as any)[kDefineConfigWasUsed];
 
     const workers = takeFirst(config.workers, '50%');

@@ -26,7 +26,7 @@ import { createFileMatcherFromArguments, createFileFiltersFromArguments, createT
 import type { Matcher, TestFileFilter } from '../util';
 import { buildProjectsClosure, collectFilesForProject, filterProjects } from './projectUtils';
 import { requireOrImport } from '../common/transform';
-import { buildFileSuiteForProject, filterByFocusedLine, filterByTestIds, filterOnly, filterTestsRemoveEmptySuites } from '../common/suiteUtils';
+import { buildFileSuiteForProject, filterByFocusedLine, filterByTestIds, filterByTitlePredicate, filterOnly, filterTestsRemoveEmptySuites } from '../common/suiteUtils';
 import { createTestGroups, filterForShard, type TestGroup } from './testGroups';
 import { dependenciesForTestFile } from '../common/compilationCache';
 
@@ -129,7 +129,7 @@ export async function createRootSuite(config: FullConfigInternal, fileSuitesByPr
     // Clone file suites for top-level projects.
     for (const [project, fileSuites] of fileSuitesByProject) {
       if (project._internal.type === 'top-level')
-        rootSuite._addSuite(await createProjectSuite(fileSuites, project, { cliFileFilters, cliTitleMatcher, testIdMatcher: config._internal.testIdMatcher }));
+        rootSuite._addSuite(await createProjectSuite(fileSuites, project, { cliFileFilters, cliTitleMatcher, testIdMatcher: config._internal.testIdMatcher, predicateTitleMatcher: config._internal.testTitlePredicate }));
     }
   }
 
@@ -172,14 +172,14 @@ export async function createRootSuite(config: FullConfigInternal, fileSuitesByPr
     // Clone file suites for dependency projects.
     for (const [project, fileSuites] of fileSuitesByProject) {
       if (project._internal.type === 'dependency' && projectClosure.has(project))
-        rootSuite._prependSuite(await createProjectSuite(fileSuites, project, { cliFileFilters: [], cliTitleMatcher: undefined }));
+        rootSuite._prependSuite(await createProjectSuite(fileSuites, project, { cliFileFilters: [], cliTitleMatcher: undefined, predicateTitleMatcher: config._internal.testTitlePredicate }));
     }
   }
 
   return rootSuite;
 }
 
-async function createProjectSuite(fileSuites: Suite[], project: FullProjectInternal, options: { cliFileFilters: TestFileFilter[], cliTitleMatcher?: Matcher, testIdMatcher?: Matcher }): Promise<Suite> {
+async function createProjectSuite(fileSuites: Suite[], project: FullProjectInternal, options: { cliFileFilters: TestFileFilter[], cliTitleMatcher?: Matcher, testIdMatcher?: Matcher, predicateTitleMatcher?: Matcher }): Promise<Suite> {
   const projectSuite = new Suite(project.name, 'project');
   projectSuite._projectConfig = project;
   if (project._internal.fullyParallel)
@@ -193,6 +193,7 @@ async function createProjectSuite(fileSuites: Suite[], project: FullProjectInter
 
   filterByFocusedLine(projectSuite, options.cliFileFilters);
   filterByTestIds(projectSuite, options.testIdMatcher);
+  filterByTitlePredicate(projectSuite, options.predicateTitleMatcher);
 
   const grepMatcher = createTitleMatcher(project.grep);
   const grepInvertMatcher = project.grepInvert ? createTitleMatcher(project.grepInvert) : null;

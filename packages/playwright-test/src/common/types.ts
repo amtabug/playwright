@@ -44,6 +44,7 @@ type ConfigInternal = {
   cliGrepInvert: string | undefined;
   cliProjectFilter?: string[];
   testIdMatcher?: Matcher;
+  testTitlePredicate?: Matcher;
   passWithNoTests?: boolean;
   defineConfigWasUsed: boolean;
 };

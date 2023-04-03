@@ -530,6 +530,24 @@ export default defineConfig({
 });
 ```
 
+## property: TestConfig.testTitlePredicate
+* since: v1.33
+- `title` <[function]\([string]\): [boolean]>
+
+
+Only the tests with titles matching the predicate are executed. Matching is performed against the test title only.
+
+**Usage**
+
+```js
+// playwright.config.ts
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  testTitlePredicate: (title: string) => title.includes('@important'),
+});
+```
+
 ## property: TestConfig.timeout
 * since: v1.10
 - type: ?<[int]>
