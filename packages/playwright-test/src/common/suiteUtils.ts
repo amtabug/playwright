@@ -121,8 +121,6 @@ export function filterByTestIds(suite: Suite, testIdMatcher: Matcher | undefined
 }
 
 export function filterByTitlePredicate(suite: Suite, testTitleMatcher: Matcher | undefined) {
-  // eslint-disable-next-line no-console
-  console.log('CALLING PREDICATE');
   if (!testTitleMatcher)
     return;
   filterTestsRemoveEmptySuites(suite, test => testTitleMatcher(test.title));
